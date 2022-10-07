@@ -1,15 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const constant_1 = __importDefault(require("./constant"));
 const Pool = require("pg").Pool;
 let pool = null;
 try {
-    pool = new Pool({
-        user: "postgres",
-        host: "localhost",
-        database: "booking",
-        password: "01655326497",
-        port: 5432,
-    });
+    pool = new Pool(constant_1.default);
 }
 catch (error) {
     console.error("postgres pool create failed");
