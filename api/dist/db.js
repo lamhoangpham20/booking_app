@@ -16,7 +16,7 @@ catch (error) {
 const api = {
     query: (query, ...parameters) => {
         let promise = new Promise(function (resolve, reject) {
-            pool.query(query, ...parameters, (error, results, fields) => {
+            pool.query(query, ...parameters, (error, results, _fields) => {
                 if (error) {
                     reject(error);
                 }

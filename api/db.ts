@@ -15,7 +15,7 @@ const api = {
       pool.query(
         query,
         ...parameters,
-        (error: any, results: unknown, fields: any) => {
+        (error: any, results: unknown, _fields: any) => {
           if (error) {
             reject(error);
           }
