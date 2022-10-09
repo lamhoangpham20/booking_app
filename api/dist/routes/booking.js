@@ -16,6 +16,7 @@ bookingRouter.get("/", (_req, res) => {
     });
 });
 bookingRouter.get("/email", async (req, res) => {
+    let error;
     let email = req.query.email;
     let page = req.query.page;
     console.log(page);
@@ -30,6 +31,13 @@ bookingRouter.get("/email", async (req, res) => {
             console.log(error);
             res.sendStatus(500);
         });
+    }
+    else {
+        error = {
+            error: true,
+            message: "Email is not filled",
+        };
+        res.send(error);
     }
     if (userId) {
         let param = [userId];
@@ -48,6 +56,13 @@ bookingRouter.get("/email", async (req, res) => {
             console.log(error);
             res.sendStatus(500);
         });
+    }
+    else {
+        error = {
+            error: true,
+            message: "User not found",
+        };
+        res.send(error);
     }
 });
 bookingRouter.post("/", (req, res) => {

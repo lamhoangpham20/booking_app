@@ -10,6 +10,11 @@ type Booking = {
   price: number;
 };
 
+type ErrorMessage = {
+  error: boolean;
+  message: string;
+};
+
 bookingRouter.get("/", (_req: Request, res: Response) => {
   db.query("SELECT * FROM booking")
     .then((results: any) => {
@@ -21,9 +26,10 @@ bookingRouter.get("/", (_req: Request, res: Response) => {
 });
 
 bookingRouter.get("/email", async (req: Request, res: Response) => {
+  let error: ErrorMessage;
   let email = req.query.email;
   let page: string | any = req.query.page;
-  console.log(page)
+  console.log(page);
   let userId = null;
   if (email) {
     userId = await db
@@ -35,6 +41,12 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
         console.log(error);
         res.sendStatus(500);
       });
+  } else {
+    error = {
+      error: true,
+      message: "Email is not filled",
+    };
+    res.send(error);
   }
   if (userId) {
     let param = [userId];
@@ -54,6 +66,12 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
         console.log(error);
         res.sendStatus(500);
       });
+  } else {
+    error = {
+      error: true,
+      message: "User not found",
+    };
+    res.send(error);
   }
 });
 
