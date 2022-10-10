@@ -52,7 +52,7 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
     let param = [userId];
     let skip = (parseInt(page) - 1) * 10;
     let query =
-      "SELECT * FROM booking where user_id = $1 ORDER BY start_time ASC limit 5";
+      "SELECT * FROM booking where user_id = $1 ORDER BY start_time ASC";
     if (page) {
       query =
         "SELECT * FROM booking where user_id = $1 ORDER BY start_time ASC limit 5 OFFSET $2";
