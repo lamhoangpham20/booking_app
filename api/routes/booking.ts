@@ -15,6 +15,7 @@ type ErrorMessage = {
   message: string;
 };
 
+// get all booking
 bookingRouter.get("/", (_req: Request, res: Response) => {
   db.query("SELECT * FROM booking")
     .then((results: any) => {
@@ -25,12 +26,14 @@ bookingRouter.get("/", (_req: Request, res: Response) => {
     });
 });
 
+//filter booking with email
 bookingRouter.get("/email", async (req: Request, res: Response) => {
   let error: ErrorMessage;
   let email = req.query.email;
   let page: string | any = req.query.page;
   console.log(page);
   let userId = null;
+  //if email is filled
   if (email) {
     userId = await db
       .query("SELECT * from user_account where email = $1", [email])
@@ -48,6 +51,7 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
     };
     res.send(error);
   }
+  //if email is valid
   if (userId) {
     let param = [userId];
     let skip = (parseInt(page) - 1) * 10;
@@ -75,6 +79,7 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
   }
 });
 
+//add new booking
 bookingRouter.post("/", (req: Request, res: Response) => {
   const body: Booking = req.body;
   console.log(body);

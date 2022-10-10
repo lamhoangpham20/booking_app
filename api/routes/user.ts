@@ -8,6 +8,7 @@ type User = {
   email: string;
 };
 
+//get all user
 userRouter.get("/", (_req: Request, res: Response) => {
   db.query("SELECT * FROM user_account")
     .then((results: any) => {
@@ -18,6 +19,7 @@ userRouter.get("/", (_req: Request, res: Response) => {
     });
 });
 
+//create new user
 userRouter.post("/", (req: Request, res: Response) => {
   const body: User = req.body;
   console.log(body);
