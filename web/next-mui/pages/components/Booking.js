@@ -8,8 +8,8 @@ export default function Booking() {
   const [input, setInput] = React.useState("");
   const [data, setData] = React.useState(null);
   const [page, setPage] = React.useState(1);
-  const submitEmail = async () => {
-    const res = await axios
+  const fetchData = async () => {
+    await axios
       .get(
         `https://booking-app-24-01.herokuapp.com/booking/email?email=${input}&page=${page}`
       )
@@ -21,10 +21,15 @@ export default function Booking() {
         console.log(err);
       });
   };
+  const submitEmail = async (event) => {
+    event.preventDefault()
+    fetchData()
+  };
 
-  const changePage = ()=>{
-    setPage(page+1)
-  }
+  const changePage = () => {
+    setPage(page + 1);
+    fetchData();
+  };
   const bookingItems = () => {
     if (data !== null) {
       if (Array.isArray(data)) {
