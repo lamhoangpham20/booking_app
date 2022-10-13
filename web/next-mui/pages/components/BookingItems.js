@@ -12,9 +12,9 @@ export default function BookingItems(props) {
             </div>
           );
         })}
-        <Button>{"<"}</Button>
+        <Button onClick={props.previousPage}>{"<"}</Button>
         {props.page}
-        <Button onClick={props.changePage}>{">"}</Button>
+        <Button onClick={props.nextPage}>{">"}</Button>
       </Container>
     </>
   );

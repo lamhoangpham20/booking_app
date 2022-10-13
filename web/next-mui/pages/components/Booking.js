@@ -4,14 +4,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookingItems from "./BookingItems";
 import axios, * as others from "axios";
 
-export default function Booking() {
+export default function Booking(initialData) {
   const [input, setInput] = React.useState("");
-  const [data, setData] = React.useState(null);
+  const [data, setData] = React.useState(initialData);
   const [page, setPage] = React.useState(1);
-  const fetchData = async () => {
+  const fetchData = async (pageInput) => {
     await axios
       .get(
-        `https://booking-app-24-01.herokuapp.com/booking/email?email=${input}&page=${page}`
+        process.env.NEXT_PUBLIC_API_URL +
+          `/booking/email?email=${input}&page=${pageInput}`
       )
       .then((result) => {
         console.log(result.data);
@@ -20,20 +21,34 @@ export default function Booking() {
       .catch((err) => {
         console.log(err);
       });
+    console.log(page);
   };
   const submitEmail = async (event) => {
-    event.preventDefault()
-    fetchData()
+    event.preventDefault();
+    fetchData(1);
   };
 
-  const changePage = () => {
+  const nextPage = async () => {
     setPage(page + 1);
-    fetchData();
+    fetchData(page + 1);
+  };
+  const previousPage = async () => {
+    if (page > 1) {
+      setPage(page - 1);
+      fetchData(page - 1);
+    }
   };
   const bookingItems = () => {
     if (data !== null) {
       if (Array.isArray(data)) {
-        return <BookingItems data={data} changePage={changePage} page={page} />;
+        return (
+          <BookingItems
+            data={data}
+            nextPage={nextPage}
+            previousPage={previousPage}
+            page={page}
+          />
+        );
       } else {
         return <div>{data.message}</div>;
       }
@@ -45,6 +60,7 @@ export default function Booking() {
     <>
       <Paper
         component="form"
+        onSubmit={submitEmail}
         sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
       >
         <InputBase
@@ -55,12 +71,7 @@ export default function Booking() {
             setInput(event.target.value);
           }}
         />
-        <IconButton
-          onClick={submitEmail}
-          type="button"
-          sx={{ p: "10px" }}
-          aria-label="search"
-        >
+        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />
         </IconButton>
       </Paper>
@@ -68,3 +79,11 @@ export default function Booking() {
     </>
   );
 }
+
+Booking.getInitialProps = async () => {
+  const req = await axios.get(
+    "https://booking-app-24-01.herokuapp.com/booking/email?email=johndoe@home&page=1"
+  );
+  const data = await req.data;
+  return { initialData: data };
+};
