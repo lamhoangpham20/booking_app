@@ -13,3 +13,7 @@ https://booking-app-24-01.herokuapp.com/user
 
 All bookings:
 https://booking-app-24-01.herokuapp.com/booking/
+
+
+The front-end test URL: https://booking-app-lamhoangpham20.vercel.app/
+search field enter: johndoe@home and submit to search

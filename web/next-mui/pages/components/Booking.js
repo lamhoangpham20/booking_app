@@ -71,7 +71,7 @@ export default function Booking(initialData) {
             setInput(event.target.value);
           }}
         />
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+        <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />
         </IconButton>
       </Paper>

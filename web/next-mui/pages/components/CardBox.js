@@ -32,29 +32,38 @@ export default function CardBox(props) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  return (
-    <Card key={props.item.booking_id} maxWidth sx={{ marginBottom: "2em" }}>
-      <CardHeader title={props.item.venue} subheader={new Date(props.item.start_time).toLocaleString()} />
-      <CardActions disableSpacing>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>
-            {new Date(props.item.start_time).toLocaleString()}-{" "}
-            {new Date(props.item.end_time).toLocaleString()}
-          </Typography>
-          <Typography>Created at: {new Date(props.item.created_at).toLocaleString()}</Typography>
-          <Typography>Place: {props.item.venue}</Typography>
-        </CardContent>
-      </Collapse>
-    </Card>
-  );
+  if (props.item) {
+    return (
+      <Card key={props.item.booking_id} maxWidth sx={{ marginBottom: "2em" }}>
+        <CardHeader
+          title={props.item.venue}
+          subheader={new Date(props.item.start_time).toLocaleString()}
+        />
+        <CardActions disableSpacing>
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography paragraph>
+              {new Date(props.item.start_time).toLocaleString()}-{" "}
+              {new Date(props.item.end_time).toLocaleString()}
+            </Typography>
+            <Typography>
+              Created at: {new Date(props.item.created_at).toLocaleString()}
+            </Typography>
+            <Typography>Place: {props.item.venue}</Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
+    );
+  } else {
+    return <></>;
+  }
 }
