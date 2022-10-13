@@ -15,7 +15,6 @@ type ErrorMessage = {
   message: string;
 };
 
-// get all booking
 bookingRouter.get("/", (_req: Request, res: Response) => {
   db.query("SELECT * FROM booking")
     .then((results: any) => {
@@ -26,23 +25,26 @@ bookingRouter.get("/", (_req: Request, res: Response) => {
     });
 });
 
-//filter booking with email
 bookingRouter.get("/email", async (req: Request, res: Response) => {
   let error: ErrorMessage;
   let email = req.query.email;
   let page: string | any = req.query.page;
   console.log(page);
   let userId = null;
-  //if email is filled
   if (email) {
     userId = await db
       .query("SELECT * from user_account where email = $1", [email])
       .then((result: any) => {
-        return result.rows[0].user_id;
+        if (result.rows[0]) {
+          return result.rows[0].user_id;
+        } else {
+          return null;
+        }
       })
       .catch((error) => {
-        console.log(error);
-        res.sendStatus(500);
+        console.log("query", error);
+        res.send({ error: true, message: error });
+        return;
       });
   } else {
     error = {
@@ -51,7 +53,6 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
     };
     res.send(error);
   }
-  //if email is valid
   if (userId) {
     let param = [userId];
     let skip = (parseInt(page) - 1) * 10;
@@ -67,8 +68,9 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
         res.send(results.rows);
       })
       .catch((error) => {
-        console.log(error);
-        res.sendStatus(500);
+        console.log("query", error);
+        res.send({ error: true, message: error });
+        return;
       });
   } else {
     error = {
@@ -79,7 +81,6 @@ bookingRouter.get("/email", async (req: Request, res: Response) => {
   }
 });
 
-//add new booking
 bookingRouter.post("/", (req: Request, res: Response) => {
   const body: Booking = req.body;
   console.log(body);

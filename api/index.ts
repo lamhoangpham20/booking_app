@@ -7,15 +7,13 @@ import cors from "cors";
 
 const app = express();
 const port = 4000;
-
 app.use(bodyParser.json());
-app.use(cors);
+app.use(express.json());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use("/user", userRouter);
 app.use("/booking", bookingRouter);
 
-app.get("/", (_req, res) => {
-  res.send("First request ");
-});
+// app.use(cors<Request>());
 
 Promise.all([
   db.query(

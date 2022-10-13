@@ -25,11 +25,17 @@ bookingRouter.get("/email", async (req, res) => {
         userId = await db_1.default
             .query("SELECT * from user_account where email = $1", [email])
             .then((result) => {
-            return result.rows[0].user_id;
+            if (result.rows[0]) {
+                return result.rows[0].user_id;
+            }
+            else {
+                return null;
+            }
         })
             .catch((error) => {
-            console.log(error);
-            res.sendStatus(500);
+            console.log("query", error);
+            res.send({ error: true, message: error });
+            return;
         });
     }
     else {
@@ -42,7 +48,7 @@ bookingRouter.get("/email", async (req, res) => {
     if (userId) {
         let param = [userId];
         let skip = (parseInt(page) - 1) * 10;
-        let query = "SELECT * FROM booking where user_id = $1 ORDER BY start_time ASC limit 5";
+        let query = "SELECT * FROM booking where user_id = $1 ORDER BY start_time ASC";
         if (page) {
             query =
                 "SELECT * FROM booking where user_id = $1 ORDER BY start_time ASC limit 5 OFFSET $2";
@@ -53,8 +59,9 @@ bookingRouter.get("/email", async (req, res) => {
             res.send(results.rows);
         })
             .catch((error) => {
-            console.log(error);
-            res.sendStatus(500);
+            console.log("query", error);
+            res.send({ error: true, message: error });
+            return;
         });
     }
     else {

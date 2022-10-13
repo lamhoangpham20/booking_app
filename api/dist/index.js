@@ -12,12 +12,10 @@ const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const port = 4000;
 app.use(body_parser_1.default.json());
-app.use(cors_1.default);
+app.use(express_1.default.json());
+app.use((0, cors_1.default)({ origin: "http://localhost:3000", credentials: true }));
 app.use("/user", user_1.default);
 app.use("/booking", booking_1.default);
-app.get("/", (_req, res) => {
-    res.send("First request ");
-});
 Promise.all([
     db_1.default.query(`CREATE TABLE IF NOT EXISTS user_account (
       user_id SERIAL NOT NULL PRIMARY KEY,
